@@ -31,6 +31,11 @@
 #include <rtw_bt_mp.h>
 #endif
 
+/* for older kernels: */
+#ifndef in_compat_syscall
+#define in_compat_syscall is_compat_task
+#endif
+
 #if defined(CONFIG_RTL8723B)
 #include <rtw_bt_mp.h>
 #endif
@@ -15392,7 +15397,7 @@ static int rtw_ioctl_standard_wext_private(struct net_device *dev, struct ifreq 
 static int rtw_ioctl_wext_private(struct net_device *dev, struct ifreq *rq)
 {
 #ifdef CONFIG_COMPAT
-	if(is_compat_task())
+	if(in_compat_syscall())
 		return rtw_ioctl_compat_wext_private( dev, rq );
 	else
 #endif // CONFIG_COMPAT
