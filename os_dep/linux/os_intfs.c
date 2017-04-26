@@ -647,14 +647,12 @@ unsigned int rtw_classify8021d(struct sk_buff *skb)
 	return dscp >> 5;
 }
 
- 
 static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 13, 0) 	
-				, void *accel_priv
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0) 
-				, select_queue_fallback_t fallback
+#if (LINUX_VERSION_CODE>=KERNEL_VERSION(3, 13, 0))
+			    ,void *accel_priv
 #endif
-
+#if (LINUX_VERSION_CODE>=KERNEL_VERSION(3, 14, 0))
+                            ,select_queue_fallback_t fallback
 #endif
 )
 {
@@ -698,15 +696,12 @@ u16 rtw_recv_select_queue(struct sk_buff *skb)
 	return rtw_1d_to_queue[priority];
 
 }
+#endif
 
-#endif
-static int rtw_ndev_notifier_call(struct notifier_block * nb, unsigned long state, void *ptr)
-{	
-#if (LINUX_VERSION_CODE>=KERNEL_VERSION(3,11,0))
-	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
-#else
-	struct net_device *dev = ptr;
-#endif
+#if (LINUX_VERSION_CODE<KERNEL_VERSION(3, 11, 0))
+static int rtw_ndev_notifier_call(struct notifier_block * nb, unsigned long state, void *ndev)
+{
+	struct net_device *dev = ndev;
 
 #if (LINUX_VERSION_CODE>=KERNEL_VERSION(2,6,29))
 	if (dev->netdev_ops->ndo_do_ioctl != rtw_ioctl)
@@ -739,7 +734,7 @@ void rtw_ndev_notifier_unregister(void)
 {
 	unregister_netdevice_notifier(&rtw_ndev_notifier);
 }
-
+#endif
 
 int rtw_ndev_init(struct net_device *dev)
 {
@@ -776,9 +771,15 @@ static const struct net_device_ops rtw_netdev_ops = {
 };
 #endif
 
+static const struct device_type wlan_type = {
+	.name = "wlan",
+};
+
 int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 {
-	_adapter *padapter = rtw_netdev_priv(pnetdev);
+	_adapter *padapter;
+	pnetdev->dev.type = &wlan_type;
+	padapter = rtw_netdev_priv(pnetdev);
 
 #ifdef CONFIG_EASY_REPLACEMENT
 	struct net_device	*TargetNetdev = NULL;

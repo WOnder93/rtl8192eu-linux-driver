@@ -342,8 +342,12 @@ int rtw_android_cmdstr_to_num(char *cmdstr)
 {
 	int cmd_num;
 	for(cmd_num=0 ; cmd_num<ANDROID_WIFI_CMD_MAX; cmd_num++)
-		if(0 == strnicmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
-			break;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 0, 0))
+	if(!strncasecmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
+#else
+	if(0 == strnicmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
+#endif
+		break;
 
 	return cmd_num;
 }
@@ -814,7 +818,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		{
 #ifdef CONFIG_LPS
 			u8 dtim;
-			u8 *ptr =(u8 *) &priv_cmd.buf;
+			u8 *ptr = (u8 *) &priv_cmd.buf;
 			
 			ptr += 9;//string command length of  "SET_DTIM";
 
