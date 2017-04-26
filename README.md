@@ -17,6 +17,8 @@ Official drivers were downloaded from D-Link Australia. D-Link USA and the europ
 
 In addition, you can find the contents of this version in the initial commit of this repo: [1387cf623d54bc2caec533e72ee18ef3b6a1db29][initial-commit]
 
+The changes from version [v4.3.8_12406.20140929][direct-download-v4.8.3] have also been merged into the repository.
+
 ## Patches
 
 You can see the applied patches, their sources and/or motivation by looking at the commits. The `master` branch will mostly be kept clean with a single commit per patch, except for Pull Requests. You can review commit by commit and then record the SHA in order to get a safe reference to use. As long as the SHA stays the same you know that what you get has been reviewed by you.
@@ -68,4 +70,5 @@ Most C files are licensed under GNU General Public License (GPL), version 2.
 
 [driver-downloads]: http://support.dlink.com.au/Download/download.aspx?product=DWA-131
 [direct-download]: ftp://files.dlink.com.au/products/DWA-131/REV_E/Drivers/DWA-131_Linux_driver_v4.3.1.1.zip
+[direct-download-v4.8.3]: https://github.com/Mange/rtl8192eu-linux-driver/files/953535/rtl8192EU_linux_v4.3.8_12406.20140929.tar.gz
 [initial-commit]: https://github.com/Mange/rtl8192eu-linux-driver/commit/1387cf623d54bc2caec533e72ee18ef3b6a1db29
